@@ -2,6 +2,8 @@ using Livros.livros.Application.Commands.Create;
 using Livros.livros.Domain.Interfaces;
 using Livros.livros.Domain.Models.Entities;
 using Livros.livros.Application.Commands.Update;
+using Livros.livros.Application.Validation;
+using Livros.livros.Application.DTOs.Response;
 
 namespace Livros.livros.Application.Handlers
 {
@@ -15,13 +17,22 @@ namespace Livros.livros.Application.Handlers
             _book = book;
         }
 
-        public Task CreateBookHandle(CreateBookCommand command)
+        public async Task<ResponseBookError> CreateBookHandle(CreateBookCommand command)
         {
-            if (command != null)
+            var validate = new EntitieValidator();
+            var results = validate.Validate(command);
+            if (results.IsValid)
             {
-                return _book.CreateBook(command);
+                await _book.CreateBook(command);
+                var anexar = new ResponseBookError(true);
+                return anexar;
             }
-            return Task.CompletedTask;
+            else
+            {
+                var error = results.Errors.Select(p => p.ErrorMessage);
+                var anexar = new ResponseBookError(false, error);
+                return anexar;
+            }
         }
 
         public List<Book> GetBookHandle()

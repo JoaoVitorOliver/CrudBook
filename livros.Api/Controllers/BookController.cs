@@ -20,23 +20,14 @@ namespace Livros.livros.Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-        public IActionResult CreateBookController([FromBody] CreateBookCommand command)
+        public async Task<IActionResult> CreateBookController([FromBody] CreateBookCommand command)
         {
-            var validator = new EntitieValidator();
-            var results = validator.Validate(command);
+            var resultado = await _handle.CreateBookHandle(command);
 
-            if (results.IsValid)
-            {
-                _handle.CreateBookHandle(command);
-            }
-            else
-            {
-                var error = results.Errors.Select(p => p.ErrorMessage);
-                return BadRequest(error);
-            }
-            
-            return Created(string.Empty, command);
+            if (resultado.IsSuccess)
+                return Created("", resultado);
 
+            return BadRequest(resultado.Errors);
         }
 
         [HttpGet]
