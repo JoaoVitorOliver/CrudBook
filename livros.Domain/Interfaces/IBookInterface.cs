@@ -10,6 +10,7 @@ namespace Livros.livros.Domain.Interfaces
         Task<Book> CreateBook(CreateBookCommand command);
         List<Book> GetAllBooks();
         Task<Book> UpdateBook(int id, CreateBookCommand command);
+        Task<Book> DeleteBook(int id);
 
     }
 }

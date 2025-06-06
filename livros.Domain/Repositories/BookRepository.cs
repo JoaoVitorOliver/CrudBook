@@ -35,5 +35,17 @@ namespace Livros.livros.Domain.Repositories
 
             return Task.FromResult(search!);
         }
+
+        public Task<Book> DeleteBook(int id)
+        {
+            var search = _Listbook.FirstOrDefault(x => x.Id == id);
+
+            if (search != null)
+            {
+                _Listbook.Remove(search);
+            }
+
+            return Task.FromResult(search!);
+        }
     }
 }

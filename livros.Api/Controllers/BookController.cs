@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Livros.livros.Application.Commands.Create;
 using Livros.livros.Application.Handlers;
 using Livros.livros.Domain.Models.Entities;
-using Livros.livros.Application.Commands.Update;
 using Livros.livros.Application.Validation;
 
 namespace Livros.livros.Api.Controllers
@@ -52,6 +51,16 @@ namespace Livros.livros.Api.Controllers
                 return NoContent();
 
             return BadRequest(response.Errors);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBookController(int id)
+        {
+            var response = await _handle.DeleteBookHandle(id);
+            if (response != null)
+                return Ok();
+
+            return BadRequest();
         }
     }
 }

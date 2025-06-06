@@ -1,7 +1,6 @@
 using Livros.livros.Application.Commands.Create;
 using Livros.livros.Domain.Interfaces;
 using Livros.livros.Domain.Models.Entities;
-using Livros.livros.Application.Commands.Update;
 using Livros.livros.Application.Validation;
 using Livros.livros.Application.DTOs.Response;
 
@@ -56,6 +55,32 @@ namespace Livros.livros.Application.Handlers
                 var anexar = new ResponseBook(false, error);
                 return anexar;
             }
+        }
+
+        public async Task<ResponseBook> UpdateBookService(int id, CreateBookCommand command)
+        {
+            var validate = new EntitieValidator();
+            var results = validate.Validate(command);
+            if (results.IsValid)
+            {
+                await _book.UpdateBook(id, command);
+                var anexar = new ResponseBook(true);
+                return anexar;
+            }
+            else
+            {
+                var error = results.Errors.Select(p => p.ErrorMessage);
+                var anexar = new ResponseBook(false, error);
+                return anexar;
+            }
+        }
+
+
+        public async Task<Book> DeleteBookHandle(int id)
+        {
+            var result = await _book.DeleteBook(id);
+
+            return result;
         }
     }
 }
