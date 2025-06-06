@@ -13,13 +13,14 @@ namespace Livros.livros.Api.Controllers
     {
         private readonly BookHandler _handle;
 
-        public BookController(BookHandler create)
+        public BookController(BookHandler handle)
         {
-            _handle = create;
+            _handle = handle;
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateBookController([FromBody] CreateBookCommand command)
         {
             var resultado = await _handle.CreateBookHandle(command);
@@ -41,11 +42,16 @@ namespace Livros.livros.Api.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateBookController(int id, [FromBody] UpdateBookCommand command)
+        [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateBookController(int id, [FromBody] CreateBookCommand command)
         {
-            var response = _handle.UpdateBookHandle(id, command);
+            var response = await _handle.UpdateBookHandle(id, command);
 
-            return NoContent();
+            if (response.IsSuccess)
+                return NoContent();
+
+            return BadRequest(response.Errors);
         }
     }
 }

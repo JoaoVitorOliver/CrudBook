@@ -1,4 +1,4 @@
-using Livros.livros.Application.Commands.Update;
+using Livros.livros.Application.DTOs.Response;
 using Livros.livros.Domain.Interfaces;
 using Livros.livros.Application.Commands.Create;
 using Livros.livros.Domain.Models.Entities;
@@ -22,7 +22,7 @@ namespace Livros.livros.Domain.Repositories
             return _Listbook;
         }
 
-        public Task<Book> UpdateBook(int id, UpdateBookCommand command)
+        public Task<Book> UpdateBook(int id, CreateBookCommand command)
         {
             var search = _Listbook.FirstOrDefault(p => p.Id == id);
 

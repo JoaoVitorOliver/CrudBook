@@ -17,20 +17,20 @@ namespace Livros.livros.Application.Handlers
             _book = book;
         }
 
-        public async Task<ResponseBookError> CreateBookHandle(CreateBookCommand command)
+        public async Task<ResponseBook> CreateBookHandle(CreateBookCommand command)
         {
             var validate = new EntitieValidator();
             var results = validate.Validate(command);
             if (results.IsValid)
             {
                 await _book.CreateBook(command);
-                var anexar = new ResponseBookError(true);
+                var anexar = new ResponseBook(true);
                 return anexar;
             }
             else
             {
                 var error = results.Errors.Select(p => p.ErrorMessage);
-                var anexar = new ResponseBookError(false, error);
+                var anexar = new ResponseBook(false, error);
                 return anexar;
             }
         }
@@ -40,9 +40,22 @@ namespace Livros.livros.Application.Handlers
             return _book.GetAllBooks();
         }
 
-        public Task<Book> UpdateBookHandle(int id, UpdateBookCommand command)
+        public async Task<ResponseBook> UpdateBookHandle(int id, CreateBookCommand command)
         {
-            return _book.UpdateBook(id, command);
+            var validate = new EntitieValidator();
+            var results = validate.Validate(command);
+            if (results.IsValid)
+            {
+                await _book.UpdateBook(id, command);
+                var anexar = new ResponseBook(true);
+                return anexar;
+            }
+            else
+            {
+                var error = results.Errors.Select(p => p.ErrorMessage);
+                var anexar = new ResponseBook(false, error);
+                return anexar;
+            }
         }
     }
 }
