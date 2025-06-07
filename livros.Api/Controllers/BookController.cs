@@ -18,6 +18,7 @@ namespace Livros.livros.Api.Controllers
         }
 
         [HttpPost]
+        [Route("create")]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateBookController([FromBody] CreateBookCommand command)
@@ -31,6 +32,7 @@ namespace Livros.livros.Api.Controllers
         }
 
         [HttpGet]
+        [Route("")]
         [ProducesResponseType(typeof(Book), StatusCodes.Status200OK)]
 
         public IActionResult GetBookController()
@@ -41,6 +43,7 @@ namespace Livros.livros.Api.Controllers
         }
 
         [HttpPut]
+        [Route("update/{id}")]
         [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateBookController(int id, [FromBody] CreateBookCommand command)
@@ -54,6 +57,7 @@ namespace Livros.livros.Api.Controllers
         }
 
         [HttpDelete]
+        [Route("delete/{id}")]
         public async Task<IActionResult> DeleteBookController(int id)
         {
             var response = await _handle.DeleteBookHandle(id);
